@@ -5,135 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Love mengru forever</title>
-  <style>
-    html, body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-             "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-             SimSun, sans-serif;
-    }
-    body, .container::before {
-      background: url("./image/1.jpg") 0 / cover fixed;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-    .container {
-      width: 90vw;
-      height: 70vh;
-      margin: 15vh auto 0;
-      overflow: hidden;
-      position: relative;
-      border-radius: 8px;
-      /* background: hsla(0, 0%, 100%, .3); */
-      background: -webkit-linear-gradient(top, #ffa5a5 0%,#ffd3d3 100%);
-      background: linear-gradient(top, #ffa5a5 0%,#ffd3d3 100%);;
-    }
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: -30px;
-      filter: blur(20px);
-    }
-    .man {
-      position: absolute;
-      z-index: 10;
-      left: 5%;
-      top: 15%;
-      font-size: 24px;
-      letter-spacing: 2px;
-    }
-    .female {
-      position: absolute;
-      z-index: 10;
-      right: 5%;
-      font-size: 24px;
-      top: 15%;
-      letter-spacing: 2px;
-    }
-    .intro {
-      writing-mode: vertical-lr;
-      position: absolute;z-index: 10;
-      font-size: 25px;
-      letter-spacing: 15px;
-      left: 50%;
-      top: 45%;
-      transform: translateX(-50%);
-    }
-    .time {
-      position: absolute;
-      font-size: 24px;
-      z-index: 100;
-      bottom: 10%;
-      left: 0;
-      width: 100%;
-      text-align: center;
-    }
-    #time {
-      font-size: 26px;
-      letter-spacing: 2px;
-    }
-    #chest {
-      width:500px;
-      height:500px;
-      position: absolute;
-      left: 50%;
-      top: 0px;
-      transform: translateX(-50%) scale(.3) translateY(-110%);
-    }
-    .heart {
-        position:absolute;
-        z-index:2;
-        background: -moz-linear-gradient(-90deg, #F50A45 0%, #d5093c 40%);
-        background: -webkit-gradient(linear, right 50%, left 50%, color-stop(0%,#F50A45), color-stop(40%,#d5093c));
-        background: -webkit-linear-gradient(-90deg, #F50A45 0%,#d5093c 40%);
-        background: linear-gradient(-90deg, #F50A45 0%,#d5093c 40%);
-        -webkit-animation: beat 0.7s ease 0s infinite normal;
-        -moz-animation: beat 0.7s ease 0s infinite normal;
-        animation: beat 0.7s ease 0s infinite normal;
-    }
-    .heart.center {
-        background: -moz-linear-gradient(-45deg, #B80734 0%, #d5093c 40%);
-        background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#B80734), color-stop(40%,#d5093c));
-        background: -webkit-linear-gradient(-45deg, #B80734 0%,#d5093c 40%);
-        background: linear-gradient(-45deg, #B80734 0%,#d5093c 40%);
-    }
-    .heart.top {
-        z-index:3;
-    }
-    .side {
-        top:100px;
-        width:220px;
-        height:220px;
-        border-radius: 220px;
-    }
-    .center {
-        width:210px;
-        height:210px;
-        bottom:100px;
-        left:145px;
-        font-size:0;
-        text-indent:-9999px;
-    }
-    .left {
-        left:62px;
-    }
-    .right {
-      right:62px;
-    }
-    @keyframes beat {
-      0% {transform: scale(1) rotate(225deg); box-shadow:0 0 40px #d5093c;}
-      50% {transform: scale(1.1) rotate(225deg); box-shadow:0 0 70px #d5093c;}
-      100% {transform: scale(1) rotate(225deg); box-shadow:0 0 40px #d5093c;}
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <div class="player open"></div>
+  <audio loop autoplay id="audio">
+    <source src="./mp3/Forever-Love.mp3" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
   <div class="container">
     <div class="man">周宇涛</div>
     <div class="female">张梦如</div>
@@ -145,7 +24,7 @@
       <div class="heart right side"></div>
     </div>
   </div>
-  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
   <script src="https://cdn.bootcss.com/moment.js/2.19.3/moment.min.js"></script>
   <script src="https://cdn.bootcss.com/moment.js/2.19.3/locale/zh-cn.js"></script>
   <script>
@@ -163,12 +42,22 @@
           const d = Math.floor(h / 24);
 
           const showTime = d + '天' + (h  % 24) + '时' + (m % 60) + '分' + (time % 60) + '秒' + (s % (60*60*24)).toString().substr(0, 3) + 'ms';
-          
+
           $('#time').html(showTime);
         }
         setInterval(startTime, 20);
+
+        $('.player').on('click', function() {
+          const $this = $(this);
+          if ($this.hasClass('open')) {
+            $('#audio')[0].pause();
+          } else {
+            $('#audio')[0].play();
+          }
+          $this.toggleClass('open');
+        })
       })
-    })(jQuery);
+    })(Zepto);
   </script>
 </body>
 </html>
