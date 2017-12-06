@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="player open"></div>
-  <audio loop autoplay id="audio">
+  <audio loop id="audio">
     <source src="./mp3/Forever-Love.mp3" type="audio/mpeg">
     Your browser does not support the audio tag.
   </audio>
@@ -32,7 +32,6 @@
       $(function() {
         moment.locale('zh-cn');
         const start = moment('2017-04-28');
-
         function startTime() {
           const today = moment();
           const s = today.add(1, 'd').diff(start);
@@ -46,6 +45,42 @@
           $('#time').html(showTime);
         }
         setInterval(startTime, 20);
+        // iphone not support autoplay
+        // $('#audio')[0].play();
+        function fakeClick(fn) {
+            var $a = $('<a href="#" id="fakeClick"></a>');
+                $a.on("click", function(e) {
+                    e.preventDefault();
+                    fn();
+                });
+
+            $("body").append($a);
+
+            var evt,
+                el = $("#fakeClick").get(0);
+
+            if (document.createEvent) {
+                evt = document.createEvent("MouseEvents");
+                if (evt.initMouseEvent) {
+                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    el.dispatchEvent(evt);
+                }
+            }
+
+            $(el).remove();
+        }
+
+        var flag = false;
+        $("body").on('touchstart', function() {
+          if (flag) return;
+          $('#audio')[0].play();
+          flag = true;
+        })
+
+        fakeClick(function() {
+            $('#audio')[0].load();
+            $('#audio')[0].play();
+        });
 
         $('.player').on('click', function() {
           const $this = $(this);
